@@ -1,37 +1,25 @@
-// Redwood Aviation Group — landing page interactions
-
-// Current year in footer
 document.getElementById("year").textContent = new Date().getFullYear();
 
-// Contact form handling.
-//
-// This static site has no backend, so by default the form composes an email to
-// Redwood Aviation Group using the visitor's mail client (mailto). This works
-// immediately on any static host (e.g. GitHub Pages) with no signup.
-//
-// To capture leads automatically instead, sign up for a form endpoint (e.g.
-// Formspree at https://formspree.io) and set FORM_ENDPOINT below to your URL.
-// When set, submissions are POSTed there and the page shows a success message.
-const FORM_ENDPOINT = ""; // e.g. "https://formspree.io/f/your-id"
+const FORM_ENDPOINT = "";
 const CONTACT_EMAIL = "rob@redwoodaviationgroup.com";
 
 const form = document.getElementById("contact-form");
-const note = document.getElementById("form-note");
+const status = document.getElementById("form-status");
 
-function setNote(message, type) {
-  note.textContent = message;
-  note.className = "form-note" + (type ? " " + type : "");
+function setStatus(msg, type) {
+  status.textContent = msg;
+  status.className = "form__status" + (type ? " " + type : "");
 }
 
-function getValues() {
-  const data = new FormData(form);
+function vals() {
+  const d = new FormData(form);
   return {
-    name: (data.get("name") || "").toString().trim(),
-    organization: (data.get("organization") || "").toString().trim(),
-    email: (data.get("email") || "").toString().trim(),
-    phone: (data.get("phone") || "").toString().trim(),
-    interest: (data.get("interest") || "").toString().trim(),
-    message: (data.get("message") || "").toString().trim(),
+    name:         (d.get("name") || "").toString().trim(),
+    organization: (d.get("organization") || "").toString().trim(),
+    email:        (d.get("email") || "").toString().trim(),
+    phone:        (d.get("phone") || "").toString().trim(),
+    interest:     (d.get("interest") || "").toString().trim(),
+    message:      (d.get("message") || "").toString().trim(),
   };
 }
 
@@ -43,10 +31,10 @@ function validate(v) {
   return null;
 }
 
-function buildEmailBody(v) {
+function buildBody(v) {
   return [
     `Name: ${v.name}`,
-    `Flight school / operation: ${v.organization || "—"}`,
+    `Organization: ${v.organization || "—"}`,
     `Email: ${v.email}`,
     `Phone: ${v.phone || "—"}`,
     `Interest: ${v.interest}`,
@@ -58,48 +46,29 @@ function buildEmailBody(v) {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const v = getValues();
+  const v = vals();
+  const err = validate(v);
+  if (err) { setStatus(err, "error"); return; }
 
-  const error = validate(v);
-  if (error) {
-    setNote(error, "error");
-    return;
-  }
-
-  // Preferred path: POST to a configured form endpoint.
   if (FORM_ENDPOINT) {
     try {
-      setNote("Sending…", "");
+      setStatus("Sending…", "");
       const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: new FormData(form),
       });
-      if (!res.ok) throw new Error("Request failed");
+      if (!res.ok) throw new Error();
       form.reset();
-      setNote("Thanks — your inquiry is on its way. We'll be in touch shortly.", "success");
-    } catch (err) {
-      setNote(
-        "Something went wrong sending the form. Please email us directly at " +
-          CONTACT_EMAIL + ".",
-        "error"
-      );
+      setStatus("Thanks — your inquiry is on its way. We'll be in touch shortly.", "success");
+    } catch {
+      setStatus("Something went wrong. Please email us directly at " + CONTACT_EMAIL + ".", "error");
     }
     return;
   }
 
-  // Fallback: open the visitor's email client with a prefilled message.
-  const subject = `Leaseback inquiry — ${v.name}${
-    v.organization ? " (" + v.organization + ")" : ""
-  }`;
-  const mailto =
-    `mailto:${CONTACT_EMAIL}` +
-    `?subject=${encodeURIComponent(subject)}` +
-    `&body=${encodeURIComponent(buildEmailBody(v))}`;
-  window.location.href = mailto;
-  setNote(
-    "Opening your email app to send the inquiry. If nothing happens, email us at " +
-      CONTACT_EMAIL + ".",
-    "success"
-  );
+  const subject = `Leaseback inquiry — ${v.name}${v.organization ? " (" + v.organization + ")" : ""}`;
+  window.location.href =
+    `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildBody(v))}`;
+  setStatus("Opening your email app with the inquiry prefilled.", "success");
 });

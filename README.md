@@ -1,9 +1,9 @@
 # Redwood Aviation Group — Website
 
-A simple, single-page marketing site for **Redwood Aviation Group**, an
-owner-first aircraft leaseback business based at Charles M. Schulz – Sonoma
-County Airport (KSTS). The page establishes a web presence and captures inbound
-leads from flight schools and operators interested in leasing an aircraft.
+A single-page marketing site for **Redwood Aviation Group LLC**, an owner-first
+aircraft leaseback business based at Charles M. Schulz – Sonoma County Airport
+(KSTS). The page establishes a web presence and captures inbound leads from
+flight schools, clubs, and operators looking to lease an aircraft.
 
 ## Contents
 
@@ -13,7 +13,23 @@ leads from flight schools and operators interested in leasing an aircraft.
 | `styles.css` | Styling (brand palette, layout, responsive design) |
 | `script.js`  | Footer year + contact form handling                |
 
-No build step, framework, or dependencies — it's plain HTML/CSS/JS.
+No build step, framework, or dependencies — it's plain HTML/CSS/JS. These three
+files together fully define the site; with all three you can restore it exactly.
+
+## Design / brand
+
+- **Theme:** black background, **bright gold** (`#f0c040`) as the primary accent,
+  **bright emerald** (`#00d97e`) as the secondary accent.
+- **Type:** Playfair Display (headings) + Inter (body).
+- **Logo:** the nav currently uses a placeholder green/gold pine-cluster icon
+  (inline SVG). To be replaced with the real Redwood Aviation Group logo
+  (trees only, transparent background) once finalized.
+
+## Sections
+
+Nav → Hero → Our Approach (3 cards) → For Flight Schools & Operators → Contact
+form → Footer. Positioning is aimed at schools/clubs/operators who want to lease
+an aircraft from Redwood.
 
 ## Run locally
 
@@ -26,16 +42,16 @@ python3 -m http.server 8000
 
 ## Contact form
 
-The form lives in the **Contact Us** section. By default the site has no
-backend, so submitting the form opens the visitor's email client with a
-prefilled message to `redwoodav8@gmail.com` (works on any static host).
+The form is in the **Contact** section. With no backend, submitting opens the
+visitor's email client with a prefilled message to `rob@redwoodaviationgroup.com`
+(works on any static host).
 
 To capture leads automatically instead:
 
 1. Create a form endpoint (e.g. a free [Formspree](https://formspree.io) form).
 2. In `script.js`, set `FORM_ENDPOINT` to your endpoint URL.
 
-Submissions will then be POSTed to that endpoint and the page shows an inline
+Submissions are then POSTed to that endpoint and the page shows an inline
 success message.
 
 ## Deploy
