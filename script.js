@@ -13,7 +13,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
 // Formspree at https://formspree.io) and set FORM_ENDPOINT below to your URL.
 // When set, submissions are POSTed there and the page shows a success message.
 const FORM_ENDPOINT = ""; // e.g. "https://formspree.io/f/your-id"
-const CONTACT_EMAIL = "redwoodav8@gmail.com";
+const CONTACT_EMAIL = "rob@redwoodaviationgroup.com";
 
 const form = document.getElementById("contact-form");
 const note = document.getElementById("form-note");
