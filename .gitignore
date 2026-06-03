@@ -1,0 +1,10 @@
+# Local tooling / session config
+.claude/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+
+# Logs
+*.log
