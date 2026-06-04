@@ -9,9 +9,10 @@ flight schools, clubs, and operators looking to lease an aircraft.
 
 | File         | Purpose                                            |
 | ------------ | -------------------------------------------------- |
-| `index.html` | The landing page markup and content                |
-| `styles.css` | Styling (brand palette, layout, responsive design) |
-| `script.js`  | Footer year + contact form handling                |
+| `index.html`     | The landing page markup and content                |
+| `styles.css`     | Styling (brand palette, layout, responsive design) |
+| `script.js`      | Footer year + contact form handling                |
+| `assets/logo.png`| The Redwood Aviation Group pine-cluster logo       |
 
 No build step, framework, or dependencies — it's plain HTML/CSS/JS. These three
 files together fully define the site; with all three you can restore it exactly.
@@ -21,9 +22,9 @@ files together fully define the site; with all three you can restore it exactly.
 - **Theme:** black background, **bright gold** (`#f0c040`) as the primary accent,
   **bright emerald** (`#00d97e`) as the secondary accent.
 - **Type:** Playfair Display (headings) + Inter (body).
-- **Logo:** the nav currently uses a placeholder green/gold pine-cluster icon
-  (inline SVG). To be replaced with the real Redwood Aviation Group logo
-  (trees only, transparent background) once finalized.
+- **Logo:** the official Redwood Aviation Group pine-cluster mark — emerald
+  pines with a gold center tree and roots, on a transparent background —
+  lives at `assets/logo.png` and is shown in the nav alongside the wordmark.
 
 ## Sections
 
