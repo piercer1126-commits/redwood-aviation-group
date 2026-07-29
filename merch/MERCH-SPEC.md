@@ -10,8 +10,26 @@ First run: **sweatshirts, black/charcoal, stacked lockup, full-front print.**
 | `lockup-8in-300dpi.png` | 2400 × 2566 | **Send this to the printer.** Full lockup, transparent, sized for an 8 in wide print at 300 DPI. |
 | `lockup-native.png` | 1343 × 1435 | Same lockup with the mark at its true native resolution, never upscaled. For a printer who prefers to scale it themselves. |
 | `mark-only.png` | 1343 × 1134 | Trees alone, transparent. For hats, sleeves, favicons, stickers. |
+| `lockup-leftchest-3.5in.png` | 1050 × 1123 | Stacked lockup for a **left-chest** print at 3.5 × 3.74 in, 300 DPI. |
+| `lockup-horizontal.png` | 2686 × 1134 | Horizontal lockup (mark left, wordmark right), 2.37 : 1. Master file — scale down as needed. |
+| `lockup-horizontal-cap-4.5in.png` | 1350 × 570 | Horizontal lockup sized for a **cap front**: 4.5 × 1.9 in, 300 DPI. |
 | `proof-black.png` | — | Visual proof on black. Not for printing. |
 | `proof-charcoal.png` | — | Visual proof on charcoal. Not for printing. |
+
+### Placement guide
+
+| Product | File | Size |
+| ------- | ---- | ---- |
+| Sweatshirt, full front | `lockup-8in-300dpi.png` | 7–8 in wide, 3–4 in below collar |
+| Sweatshirt, left chest | `lockup-leftchest-3.5in.png` | 3.5 in wide |
+| Cap front | `lockup-horizontal-cap-4.5in.png` | 4.5 in wide |
+| Sleeve / small accents | `mark-only.png` | 2–3 in wide |
+
+**Caps and embroidery:** the horizontal lockup is correct for a printed or
+DTF-patch cap. For *stitched* embroidery, the fine root system won't reproduce —
+roots thinner than about 1 mm cannot be stitched cleanly. For embroidered caps,
+either use `mark-only.png` and let the digitizer simplify the roots, or choose a
+DTF/woven/leather patch instead, which reproduces the artwork as drawn.
 
 All three artwork files have **true transparency** — correct for DTF/DTG on dark
 garments. The tree trunks are intentional open gaps, so the garment color shows
