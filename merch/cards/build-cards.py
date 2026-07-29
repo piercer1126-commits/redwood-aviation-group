@@ -51,8 +51,15 @@ def build_back():
     lk=fit_w(lockh,2.45)
     ly=int(CH*0.5 - lk.height*0.5 - 0.085*DPI)
     c.alpha_composite(lk,((CW-lk.width)//2, ly))
-    f=inter(5.4,600); tr=0.22*f.size
-    tracked(d,CW/2, ly+lk.height+int(0.20*DPI), "OWNER-FIRST AIRCRAFT LEASEBACK PARTNERSHIPS", f, tr, GOLD, "c")
+    TAG="AIRCRAFT LEASEBACK PARTNERSHIPS"
+    # size the tagline so it optically matches the lockup width above it
+    target=2.05*DPI; lo,hi=3.0,12.0
+    for _ in range(40):
+        mid=(lo+hi)/2; f=inter(mid,600)
+        if wof(TAG,f,0.22*f.size)<target: lo=mid
+        else: hi=mid
+    f=inter(lo,600)
+    tracked(d,CW/2, ly+lk.height+int(0.20*DPI), TAG, f, 0.22*f.size, GOLD, "c")
     return c
 
 # ---------------- FRONT ----------------

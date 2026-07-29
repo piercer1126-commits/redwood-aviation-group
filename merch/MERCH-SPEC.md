@@ -124,3 +124,70 @@ needed for apparel.
 - [ ] Garment confirmed: black or charcoal
 - [ ] Method confirmed: DTF or DTG
 - [ ] Physical proof approved before the full run
+
+---
+
+# Business Cards
+
+Files in `merch/cards/`.
+
+| File | For |
+| ---- | --- |
+| `card-front-robert-pierce.png` | Robert Pierce — CEO / Co-Founder |
+| `card-front-mario-rosso.png` | Mario Rosso — CFO / Co-Founder |
+| `card-back.png` | Shared back — same for both |
+| `build-cards.py` | Regenerates all of the above |
+
+## Specs
+
+| | |
+| --- | --- |
+| Trim size | 3.5 × 2.0 in (US standard) |
+| File size | 3.75 × 2.25 in — includes 0.125 in bleed on all sides |
+| Pixels | 2250 × 1350 |
+| Resolution | 600 DPI |
+| Orientation | Landscape |
+| Color | Background `#0a0a0c`, gold `#f0c040`, body text `#e8e4dd` |
+| Type | Playfair Display Bold (names) · Inter (titles, contact) |
+
+The extra 0.125 in around every edge is **bleed** — it gets trimmed off. It
+exists so that a slight cutting misalignment shows more black rather than a
+white sliver. All text sits inside the safe area, at least 0.25 in from the
+file edge, so nothing can be clipped.
+
+## Layout
+
+**Front:** name in Playfair Display Bold (white), title in letterspaced Inter
+caps (gold), short gold rule, then phone / email / website. Pine mark on the
+right, vertically centered.
+
+**Back:** horizontal lockup centered, with `AIRCRAFT LEASEBACK PARTNERSHIPS`
+letterspaced in gold beneath it.
+
+## Ordering
+
+Upload the front and back as a two-sided job. Both files already include bleed,
+so choose "my file includes bleed" if asked.
+
+- **Moo** — best quality for small runs; strong on dark stock
+- **Jukebox** — specialty stocks; soft-touch black with gold looks genuinely premium
+- **Canva Print** — convenient, decent quality
+- **Vistaprint** — cheapest acceptable option
+
+**Get soft-touch or matte laminate.** Bare dark stock shows fingerprints
+immediately; laminate also deepens the black and makes the gold read richer.
+
+Avoid glossy UV coating — it makes dark cards look cheap and reflects badly
+under hangar and FBO lighting.
+
+## To change details later
+
+```bash
+curl -sSL -o /tmp/PlayfairDisplay.ttf \
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/playfairdisplay/PlayfairDisplay%5Bwght%5D.ttf"
+curl -sSL -o /tmp/Inter.ttf \
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz,wght%5D.ttf"
+
+python3 merch/cards/build-cards.py '[{"slug":"name","name":"Full Name",
+  "title":"Title","phone":"(707) 555-0000","email":"you@redwoodaviationgroup.com"}]'
+```
