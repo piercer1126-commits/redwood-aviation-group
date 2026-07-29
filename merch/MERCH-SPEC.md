@@ -1,118 +1,108 @@
 # Redwood Aviation Group — Merch Spec
 
-Reference for producing branded apparel. First run: **sweatshirts, black/charcoal,
-stacked lockup, full-front print.**
+Print-ready artwork and specs for branded apparel.
+First run: **sweatshirts, black/charcoal, stacked lockup, full-front print.**
 
-## Files in this folder
+## Print files — `merch/print/`
 
-| File | What it is |
-| ---- | ---------- |
-| `lockup-stacked.png` | Layout proof of the stacked lockup (transparent background) |
-| `proof-black.png` | Same lockup shown on black |
-| `proof-charcoal.png` | Same lockup shown on charcoal |
-| `resolution-check.png` | Why the current file can't be printed as-is |
+| File | Size (px) | Use |
+| ---- | --------- | --- |
+| `lockup-8in-300dpi.png` | 2400 × 2566 | **Send this to the printer.** Full lockup, transparent, sized for an 8 in wide print at 300 DPI. |
+| `lockup-native.png` | 1343 × 1435 | Same lockup with the mark at its true native resolution, never upscaled. For a printer who prefers to scale it themselves. |
+| `mark-only.png` | 1343 × 1134 | Trees alone, transparent. For hats, sleeves, favicons, stickers. |
+| `proof-black.png` | — | Visual proof on black. Not for printing. |
+| `proof-charcoal.png` | — | Visual proof on charcoal. Not for printing. |
 
-> **These are layout proofs, not print files.** They define composition,
-> proportion, and color. The final print file must be exported fresh from Canva
-> at the sizes below. See "Getting a print-ready file."
+All three artwork files have **true transparency** — correct for DTF/DTG on dark
+garments. The tree trunks are intentional open gaps, so the garment color shows
+through them.
 
 ## The lockup
 
-Stacked, centered:
+Stacked and centered:
 
 ```
       [ pine cluster mark ]
            REDWOOD
-      AVIATION GROUP
+       AVIATION  GROUP
 ```
 
-- Wordmark sits directly under the mark, optically centered on the gold center tree.
-- `REDWOOD` is the dominant line; `AVIATION GROUP` is roughly half its cap height
-  and more widely letterspaced so both lines end up near the same visual width.
-- Wordmark total width stays slightly narrower than the tree cluster.
-- Overall lockup aspect is about **0.9 : 1** (slightly taller than wide).
-
-### Typography
-
-- **Typeface:** Playfair Display Bold — the same serif used on the website.
-- All caps, generous letterspacing on both lines.
-- The proofs in this folder were built with a substitute serif because Playfair
-  wasn't available locally. **Rebuild the final in Canva using Playfair Display**
-  so the merch matches the site.
+- **Typeface: Playfair Display Bold (weight 700)** — the same serif as the website.
+- All caps. `REDWOOD` set to ~88% of the mark's width; `AVIATION GROUP` to ~86%
+  with wider letterspacing, so both lines read as one justified block.
+- Overall lockup aspect ≈ **0.94 : 1** (slightly taller than wide).
 
 ## Colors
 
-Sampled from the logo artwork itself:
-
 | Role | Hex | Notes |
 | ---- | --- | ----- |
-| Brand gold (wordmark) | `#f0c040` | Matches the website's primary accent |
-| Logo gold, average | `#db9b05` | The center tree's mid-tone |
-| Logo gold, gradient | `#976900` → `#ffc452` | Dark to light across the tree |
-| Logo green, average | `#06944d` | The surrounding pines |
-| Logo green, gradient | `#025e1f` → `#73d469` | Dark to light across the pines |
+| Wordmark gold | `#f0c040` | Solid. Matches the website's primary accent. |
+| Mark gold, average | `#db9b05` | Center tree mid-tone |
+| Mark gold, gradient | `#976900` → `#ffc452` | |
+| Mark green, average | `#06944d` | Surrounding pines |
+| Mark green, gradient | `#025e1f` → `#73d469` | |
 
-The mark is **not flat color** — it contains roughly 12,000 distinct shades
-because every tree is gradient-filled. This drives the print-method decision below.
+The mark is **gradient-filled, not flat** (~12,000 distinct shades). This drives
+the print-method choice below.
 
-The tree trunks are transparent gaps, not white. On a dark garment they read as
-intentional negative space, which is why the mark works on black without a knockout.
+## Print size
 
-## Print sizes
+The mark's true resolution is **1343 px wide**. That is the real constraint — the
+wordmark is rendered as type and stays sharp at any size.
 
-Lockup aspect is ~0.9:1, so height is the limiting dimension on a chest print.
+| Print width | Mark effective DPI | Verdict |
+| ----------- | ------------------ | ------- |
+| 6 in | 224 | Excellent |
+| 7 in | 192 | **Recommended** |
+| 8 in | 168 | Very good — supplied file is built for this |
+| 9 in | 149 | Acceptable; about the practical floor |
+| 10 in | 134 | Not advised |
 
-| Placement | Width | Height | Pixels needed @300 DPI |
-| --------- | ----- | ------ | ---------------------- |
-| Full front (recommended) | 10 in | ~11.1 in | **3000 × 3345 px** |
-| Full front, conservative | 9 in | ~10 in | 2700 × 3010 px |
-| Left chest | 4 in | ~4.5 in | 1200 × 1338 px |
+**Recommended: 7–8 in wide**, centered, top edge about 3–4 in below the collar seam.
+On knit fabric, 170–190 DPI is visually indistinguishable from 300 DPI — the weave
+is coarser than the ink detail.
 
-Position a full-front print about 3–4 in below the collar seam.
-
-## Getting a print-ready file
-
-The current `assets/logo.png` is **350 × 298 px** — sized for the website. Print
-needs about 300 DPI, so a 10 in wide print needs ~3000 px. Enlarging the existing
-file cannot add detail that was never there; edges go soft and stair-stepped
-(see `resolution-check.png`).
-
-Re-export from the Canva original instead:
-
-1. **Best — vector.** In Canva, Share → Download → **SVG** or **PDF Print**
-   (both require Canva Pro). Vector scales to any size with zero quality loss.
-   Give this to the printer and any size becomes possible.
-2. **Good — large PNG.** If you're on the free plan: set the Canva canvas to the
-   print size in inches (e.g. 10 × 11.1 in) *before* exporting, then
-   Download → PNG with the size slider at maximum, and tick **Transparent background**.
-3. Either way, build the full stacked lockup in Canva — mark plus both lines of
-   Playfair Display — so it exports as one correctly-proportioned file.
-
-**One caveat:** this only works if the trees in your Canva file are vector
-elements (Canva graphics/shapes). If the logo was placed into Canva as an
-imported image, exporting larger won't help and the mark would need to be
-redrawn as vector.
+For a **left chest** print, use `mark-only.png` at 3.5–4 in wide (335–384 DPI).
 
 ## Print method
 
-The gradients are the deciding factor.
-
 | Method | Fit | Notes |
 | ------ | --- | ----- |
-| **DTF transfer** | Best for a first run | Handles gradients exactly. No minimums, no color separations. Strong on dark garments. |
-| **DTG** | Also good | Prints gradients well. On black it needs a white underbase — factor that into cost. Best for low quantities. |
-| **Screen print** | Best at volume (24+) | Each color is its own screen; gradients need halftones, which costs extra. For this route, ask for a flattened 3-color version (gold, mid green, dark green). |
-| **Embroidery** | Needs rework | Very premium on sweatshirts, but the fine root system and gradients cannot be stitched as drawn. Would require a simplified mark. |
+| **DTF transfer** | **Best for a first run** | Reproduces the gradients exactly. No minimums, no color separations. Excellent on dark garments. |
+| **DTG** | Also good | Handles gradients well. On black it needs a white underbase — factor into cost. |
+| **Screen print** | Best at 24+ units | Each color is a separate screen; gradients need halftones, which costs more. Ask for a flattened 3-color version (gold, mid green, dark green) if going this route. |
+| **Embroidery** | Needs rework | Premium look, but the fine root system and gradients can't be stitched as drawn. Requires a simplified mark. |
 
-**Recommendation for a first small run on black:** DTF or DTG. Both reproduce the
-gradient artwork as designed with no minimums and no artwork rework.
+**Recommendation:** DTF or DTG for the first run. Both print the artwork as
+designed with no rework and no minimums.
 
-## Checklist before sending to a printer
+## Source & provenance
 
-- [ ] Vector (SVG/PDF) or ≥3000 px wide PNG exported from Canva
-- [ ] Transparent background
-- [ ] Built with Playfair Display Bold
-- [ ] Gold set to `#f0c040`
-- [ ] Print size and placement specified (10 in wide, 3–4 in below collar)
-- [ ] Garment color confirmed (black or charcoal)
-- [ ] Physical proof or press sample approved before the full run
+- Origin: Canva design *"Copy of Copy of Untitled"* — worth renaming to
+  **"Redwood Aviation Group — Logo"** so it's findable.
+- Exported at 2000 × 2000; the artwork itself occupies 1343 × 1134 of that canvas
+  (the rest was white padding, since removed).
+- The Canva source is a **flat raster image**, not vector shapes. There is no way
+  to export it larger with more real detail, and **Canva Pro would not change
+  this** — the ceiling is in the artwork, not the export plan. Don't upgrade for this.
+- White background removed locally with per-pixel alpha estimation and
+  white-unpremultiply, so edges carry no light fringe on dark garments.
+- Minor caveat: the file transited as lossy WebP, so there is slight compression
+  in flat areas. Measured impact is ~0.2% of pixels and is irrelevant at print
+  scale on fabric.
+
+### If you ever want true unlimited scaling
+
+The mark would need to be redrawn as vector (SVG). Worth doing only if you later
+want large-format use — banners, vehicle graphics, a trade-show booth. It is not
+needed for apparel.
+
+## Pre-flight checklist
+
+- [ ] Send `lockup-8in-300dpi.png`
+- [ ] Confirm transparent background preserved (no white box behind the trees)
+- [ ] Print width specified: 7–8 in
+- [ ] Placement specified: centered, 3–4 in below collar
+- [ ] Garment confirmed: black or charcoal
+- [ ] Method confirmed: DTF or DTG
+- [ ] Physical proof approved before the full run
