@@ -1,17 +1,33 @@
 """Build Redwood Aviation Group business cards (3.5x2in, 0.125in bleed, 600 DPI).
 
-Fonts (SIL Open Font License, fetched to /tmp before running):
+Fonts (SIL Open Font License). Fetch once into a directory, then point FONT_DIR
+at it (defaults to /tmp):
 
   curl -sSL -o /tmp/PlayfairDisplay.ttf \
     "https://raw.githubusercontent.com/google/fonts/main/ofl/playfairdisplay/PlayfairDisplay%5Bwght%5D.ttf"
   curl -sSL -o /tmp/Inter.ttf \
     "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz,wght%5D.ttf"
 
+Artwork is read from the repo (merch/print/), so this script needs no other
+external files.
+
 Usage:
   python3 build-cards.py '[{"slug":"rob","name":"...","title":"...",
-                            "phone":"...","email":"..."}]'
+                            "phone":"...","email":"...",
+                            "sites":["redwoodaviationgroup.com","HobbsIQ.com"]}]'
+
+  FONT_DIR   override font location (default /tmp)
+  GUIDE_DIR  where to write trim/safe-area preview copies (default /tmp)
 """
+import os
+from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
+
+REPO  = Path(__file__).resolve().parents[2]
+ART   = REPO/"merch"/"print"
+OUT   = REPO/"merch"/"cards"
+FONTS = Path(os.environ.get("FONT_DIR", "/tmp"))
+GUIDE = Path(os.environ.get("GUIDE_DIR", "/tmp"))
 
 DPI   = 600
 PT    = DPI/72.0
@@ -23,7 +39,7 @@ SAFE  = BLEED + int(0.125*DPI)         # 150px from canvas edge
 BLACK=(10,10,12,255); GOLD=(240,192,64,255); WHITE=(255,255,255,255)
 INK=(232,228,221,255); SOFT=(150,146,140,255)
 
-PF="/tmp/PlayfairDisplay.ttf"; IN="/tmp/Inter.ttf"
+PF=str(FONTS/"PlayfairDisplay.ttf"); IN=str(FONTS/"Inter.ttf")
 def playfair(pt,w=700):
     f=ImageFont.truetype(PF,int(round(pt*PT))); f.set_variation_by_axes([w]); return f
 def inter(pt,w=400):
@@ -39,8 +55,8 @@ def tracked(d,x,base,t,f,tr,fill,anchor="l"):
     return w
 def cap(f): b=f.getbbox("H"); return b[3]-b[1]
 
-mark=Image.open("/tmp/logo-2000-transparent.png").convert("RGBA")
-lockh=Image.open("/home/user/redwood-aviation-group/merch/print/lockup-horizontal.png").convert("RGBA")
+mark  = Image.open(ART/"mark-only.png").convert("RGBA")
+lockh = Image.open(ART/"lockup-horizontal.png").convert("RGBA")
 
 def fit_w(img,inches):
     w=int(inches*DPI); return img.resize((w,round(img.height*w/img.width)),Image.LANCZOS)
@@ -63,12 +79,11 @@ def build_back():
     return c
 
 # ---------------- FRONT ----------------
-def build_front(name,title,phone,email,site="redwoodaviationgroup.com"):
+def build_front(name,title,phone,email,sites=("redwoodaviationgroup.com",)):
     c=Image.new("RGBA",(CW,CH),BLACK); d=ImageDraw.Draw(c)
     # mark, right side, vertically centered
     mk=fit_w(mark,1.02)
-    mx=CW-SAFE-mk.width
-    c.alpha_composite(mk,(mx,(CH-mk.height)//2))
+    c.alpha_composite(mk,(CW-SAFE-mk.width,(CH-mk.height)//2))
 
     x=SAFE
     fn=playfair(11.5,700); ft=inter(5.8,600); fc=inter(6.9,400); fs=inter(6.9,500)
@@ -76,7 +91,9 @@ def build_front(name,title,phone,email,site="redwoodaviationgroup.com"):
     line_gap=int(0.052*DPI)
     rule_gap=int(0.075*DPI)
 
-    block_h = cn + int(0.055*DPI) + ct + rule_gap + 4 + rule_gap + cc*3 + line_gap*2
+    lines=[(phone,fc,INK),(email,fc,INK)]+[(s,fs,GOLD) for s in sites]
+    n=len(lines)
+    block_h = cn + int(0.055*DPI) + ct + rule_gap + 4 + rule_gap + cc*n + line_gap*(n-1)
     y = (CH-block_h)//2 + cn
 
     tracked(d,x,y,name.upper(),fn,0.055*fn.size,WHITE)
@@ -85,7 +102,7 @@ def build_front(name,title,phone,email,site="redwoodaviationgroup.com"):
     y += rule_gap
     d.rectangle([x,y,x+int(0.62*DPI),y+3],fill=GOLD)
     y += 3 + rule_gap + cc
-    for txt,fnt,col in ((phone,fc,INK),(email,fc,INK),(site,fs,GOLD)):
+    for txt,fnt,col in lines:
         tracked(d,x,y,txt,fnt,0.012*fnt.size,col)
         y += cc + line_gap
     return c
@@ -99,14 +116,14 @@ def guides(card):
 if __name__=="__main__":
     import sys, json
     people=json.loads(sys.argv[1])
-    out="/home/user/redwood-aviation-group/merch/cards"
-    back=build_back(); back.save(f"{out}/card-back.png")
+    GUIDE.mkdir(parents=True, exist_ok=True)
+    back=build_back(); back.save(OUT/"card-back.png")
+    guides(back).save(GUIDE/"guide-back.png")
     print("back:", back.size)
     for p in people:
-        slug=p["slug"]
-        fr=build_front(p["name"],p["title"],p["phone"],p["email"])
-        fr.save(f"{out}/card-front-{slug}.png")
-        guides(fr).save(f"/tmp/guide-{slug}.png")
-        print("front:",slug,fr.size)
-    guides(back).save("/tmp/guide-back.png")
+        fr=build_front(p["name"],p["title"],p["phone"],p["email"],
+                       p.get("sites",["redwoodaviationgroup.com"]))
+        fr.save(OUT/f"card-front-{p['slug']}.png")
+        guides(fr).save(GUIDE/f"guide-{p['slug']}.png")
+        print("front:",p["slug"],fr.size)
     print("canvas %dx%d px = %.2fx%.2f in @%d DPI (incl. bleed)"%(CW,CH,CW/DPI,CH/DPI,DPI))
