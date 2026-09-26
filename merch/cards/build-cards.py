@@ -21,6 +21,7 @@ Usage:
 """
 import os
 from pathlib import Path
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 REPO  = Path(__file__).resolve().parents[2]
@@ -58,8 +59,17 @@ def cap(f): b=f.getbbox("H"); return b[3]-b[1]
 mark  = Image.open(ART/"mark-only.png").convert("RGBA")
 lockh = Image.open(ART/"lockup-horizontal.png").convert("RGBA")
 
+def clean_pale(img):
+    """Drop near-white unsaturated pixels that resampling can ring into existence."""
+    a=np.asarray(img).astype(np.float32); rgb,al=a[...,:3],a[...,3]
+    mn=rgb.min(axis=2); chroma=rgb.max(axis=2)-mn
+    ramp=lambda v,lo,hi: np.clip((v-lo)/(hi-lo),0,1)
+    factor=ramp(mn,140,200)*(1.0-ramp(chroma,40,80))
+    return Image.fromarray(np.dstack([rgb, al*(1.0-factor)]).astype(np.uint8),"RGBA")
+
 def fit_w(img,inches):
-    w=int(inches*DPI); return img.resize((w,round(img.height*w/img.width)),Image.LANCZOS)
+    w=int(inches*DPI)
+    return clean_pale(img.resize((w,round(img.height*w/img.width)),Image.LANCZOS))
 
 # ---------------- BACK ----------------
 def build_back():

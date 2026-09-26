@@ -7,14 +7,15 @@ First run: **sweatshirts, black/charcoal, stacked lockup, full-front print.**
 
 | File | Size (px) | Use |
 | ---- | --------- | --- |
-| `lockup-8in-300dpi.png` | 2400 × 2566 | **Send this to the printer.** Full lockup, transparent, sized for an 8 in wide print at 300 DPI. |
+| `lockup-8in-300dpi.png` | 2399 × 2566 | **Send this to the printer.** Full lockup, transparent, sized for an 8 in wide print at 300 DPI. |
 | `lockup-native.png` | 1343 × 1435 | Same lockup with the mark at its true native resolution, never upscaled. For a printer who prefers to scale it themselves. |
-| `mark-only.png` | 1343 × 1134 | Trees alone, transparent. For hats, sleeves, favicons, stickers. |
+| `mark-only.png` | 1343 × 1134 | Trees alone, transparent. **Master artwork** — everything else is built from it. |
 | `lockup-leftchest-3.5in.png` | 1050 × 1123 | Stacked lockup for a **left-chest** print at 3.5 × 3.74 in, 300 DPI. |
 | `lockup-horizontal.png` | 2686 × 1134 | Horizontal lockup (mark left, wordmark right), 2.37 : 1. Master file — scale down as needed. |
 | `lockup-horizontal-cap-4.5in.png` | 1350 × 570 | Horizontal lockup sized for a **cap front**: 4.5 × 1.9 in, 300 DPI. |
 | `proof-black.png` | — | Visual proof on black. Not for printing. |
 | `proof-charcoal.png` | — | Visual proof on charcoal. Not for printing. |
+| `build-lockups.py` | — | Rebuilds every lockup above from `mark-only.png`. |
 
 ### Placement guide
 
@@ -105,6 +106,14 @@ designed with no rework and no minimums.
   this** — the ceiling is in the artwork, not the export plan. Don't upgrade for this.
 - White background removed locally with per-pixel alpha estimation and
   white-unpremultiply, so edges carry no light fringe on dark garments.
+- **Speck repair:** the first background removal left 166 pure-white pixels at
+  full opacity along branch edges — anti-aliased pixels whose alpha rounded up
+  to opaque while the color was still background white. They showed as white
+  flecks on dark garments. Now removed with a graduated filter keyed on
+  brightness and saturation. Real artwork is always saturated (chroma ≥ 80)
+  even at its lightest, so the filter cannot touch it. Rescaling can ring pale
+  pixels back into existence, so the same cleanup runs after every resample in
+  both build scripts.
 - Minor caveat: the file transited as lossy WebP, so there is slight compression
   in flat areas. Measured impact is ~0.2% of pixels and is irrelevant at print
   scale on fabric.
